@@ -22,10 +22,12 @@ $response = $client->send_request($request);
 
 //$response = $client->publish($request);
 
-echo "client received response: ".PHP_EOL;
+echo "client received response: " . PHP_EOL;
 print_r($response);
 
-echo php_EOL;
+echo "\n";
+
+echo "\n";
 
 echo "Client doneee" . PHP_EOL;
 
