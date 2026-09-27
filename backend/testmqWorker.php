@@ -4,13 +4,13 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
-//function manages requests sent by MQ
+//function manages requests sent by MQ if statments print messages depending if the connectivity test was valid
 
 function requestManager($request)
 {
-	print_r($request)
+	print_r($request);
 	
-	if(!isset($request['type']))
+	if (!isset($request['type']))
 	{
 		return array(
 			"returnCode" => 1,
