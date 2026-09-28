@@ -38,5 +38,31 @@ public function createSession($userid)
 	}
 	return false;
 }
+
+public function validateSession($sessionid)
+{
+	$currentTime = date('Y-m-d H:i:s');
+	$statement = $this->sessiondb->prepare("SELECT * FROM sessions WHERE sessionid = ?");
+	$statement->bind_param("s", $sessionid);
+	$statement->execute();
+	$result = $statement->get_result();
+
+	if($result->num_rows === 0){
+		echo "session does not exist" . PHP_EOL;
+		return false;
+	}
+
+	$row = $result->fetch_assoc();
+	$expires_at = $row["expires_at"];
+
+	if($currentTime < $expires_at){
+		echo "session valid";
+		return true;
+	} else {
+		echo "session expired";
+		return false;
+	}
+}
+
 }
 ?>
