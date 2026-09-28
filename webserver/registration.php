@@ -1,11 +1,40 @@
-<php>
-
-//Files needed to comunicate with RabbitMQ
+#!/usr/bin/php
+<?php
 require_once('path.inc');
-require_once('get_host_info_.inc');
-require_once('rabbitMQLib.ini');
+require_once('get_host_info.inc');
+require_once('rabbitMQLib.inc');
 
 
 
+$client = new rabbitMQClient("testRabbitMQ.ini","registerServer");
 
+//building array to sent to worker with data sent from register.php
+
+$request = array();
+$request['type'] = "register";
+$request['email'] = $_POST['email'];
+$request['first_name'] = $_POST['first_name'];
+$request['last_name'] = $_POST['last_name'];
+$request['username'] = $_POST['username'];
+$request['password'] = $_POST['password'];
+
+echo "Sending a request" . PHP_EOL;
+
+print_r($request);
+
+
+$response = $client->send_request($request);
+
+//$response = $client->publish($request));
+
+echo "client received response: " . PHP_EOL;
+print_r($response);
+
+echo "\n";
+
+echo "\n";
+
+echo "Client doneee" . PHP_EOL;
+
+?>
 </php>
