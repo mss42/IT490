@@ -38,7 +38,7 @@ function requestManager($request)
 
 	// Prepare SQL Statement, then set parameters, then execute the statement. btw FROM = ?? waiting for table..
 
-	$chkUser = $db->prepare("SELECT username, email, FROM ???, WHERE username = ? OR email = ?");
+	$chkUser = $db->prepare("SELECT username, email, FROM users, WHERE username = ? OR email = ?");
 
 	$chkUser->bind_param('ss',$request['username'], $request['email']);
 
@@ -74,7 +74,7 @@ function requestManager($request)
 
 	// no dupes... time to insert it :D also rememeber table undefined idk what it is yet :(
 	
-	$insertUser = $db->prepare("INSERT INTO ??? (email, first_name, last_name, username, password)
+	$insertUser = $db->prepare("INSERT INTO users (email, first_name, last_name, username, password)
 		VALUES (?, ?, ?, ?, ?");
 
 	$insertUser->bind_param("sssss", $request['email'], $request['first_name'], $request['last_name'],
