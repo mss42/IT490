@@ -22,7 +22,7 @@ function requestManager($request)
 	
 	if ($request['type'] == "register")
 	{
-		$db = new mysqli('127.0.0.1', 'dbUser', '12345', 'authenticationdb' )
+		$db = new mysqli('127.0.0.1', 'dbUser', '12345', 'authenticationdb' );
 
 	}
 
@@ -54,7 +54,7 @@ function requestManager($request)
 
 		//grabs current row and checks if there aren't any dupes
 		
-		$existingUser = $result->fetch_assoc()
+		$existingUser = $result->fetch_assoc();
 		
 			if ($existingUser['username'] == $request['username']){
 				return array(
