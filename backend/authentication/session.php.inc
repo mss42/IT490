@@ -5,7 +5,7 @@ private $sessiondb;
 
 public function __construct()
 {
-        $this->sessiondb = new mysqli("127.0.0.1","sessionUser","12345","authenticationdb");
+        $this->sessiondb = new mysqli("100.105.60.109","sessionUser","12345","authenticationdb");
 
         if ($this->sessiondb->connect_errno != 0)
         {
