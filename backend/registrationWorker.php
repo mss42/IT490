@@ -1,8 +1,6 @@
 #!/usr/bin/php
 <?php
-require_once('path.inc');
-require_once('get_host_info.inc');
-require_once('rabbitMQLib.inc');
+require_once __DIR__ . '/../RabbitMQ/rabbitMQLib.inc';
 
 //php request manager to submit new registration info.. also checks if user already exists.. lets hope this works ;(
 
@@ -30,12 +28,12 @@ function requestManager($request)
 //checking if databse already has exisitng user
 
 	try{
-	if ($db->connect_error) {
-		return array(
-			"returnCode" => 1,
-			"message" => "Database connectivty FAILED try again LMAOO"
-		);
-	}
+
+        if ($request['type'] == "register")
+        {
+		 $db = new mysqli('100.105.60.109', 'dbUser', '12345', 'authenticationdb' );
+
+        }
 
 	// Prepare SQL Statement, then set parameters, then execute the statement.
 
@@ -105,7 +103,7 @@ function requestManager($request)
 
 
 
-$server = new rabbitMQServer("testRabbitMQ.ini","authServer");
+$server = new rabbitMQServer("testRabbitMQ.ini","registerServer");
 
 echo "Waiting for registration information..." . PHP_EOL;
 
