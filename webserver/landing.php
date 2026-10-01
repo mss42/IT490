@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Login Successful</title>
+</head>
+<body>
+	<h1>Welcome in<h1>
+</body>

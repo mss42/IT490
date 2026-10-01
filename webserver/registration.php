@@ -33,7 +33,7 @@ print_r($response);
 
 //Testing if registration work direct user to login if not stay on register page
 
-if (isset($response['returnCode']) && $response['returnCode'] == 1) {
+if (isset($response['returnCode']) && $response['returnCode'] == 0) {
 	//registeration worked
 	//user goes to login page
 	header("Location: index.php");
