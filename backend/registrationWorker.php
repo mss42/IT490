@@ -23,7 +23,7 @@ function requestManager($request)
 	
 	if ($request['type'] == "register")
 	{
-		$db = new mysqli('127.0.0.1', 'dbUser', '12345', 'authenticationdb' );
+		$db = new mysqli('100.105.60.109', 'dbUser', '12345', 'authenticationdb' );
 
 	}
 
