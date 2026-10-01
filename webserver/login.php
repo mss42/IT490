@@ -30,3 +30,15 @@ $response = $client->send_request($request);
 echo "client received response: " . PHP_EOL;
 print_r($response);
 
+if (isset($response['returnCode']) && $response['returnCode'] == 0) {
+	header("Location: landing.php");
+	exit();
+}
+else {
+	echo "Login Failed" . PHP_EOL;
+
+	//user stays on login
+	header("Location: index.php");
+	exit();
+}
+
