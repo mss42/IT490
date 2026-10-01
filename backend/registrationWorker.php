@@ -16,6 +16,7 @@ function requestManager($request)
 			"returnCode" => '1',
 			"message" => "Missing request type womp womp"
 		);
+
 	}
 
 	//accessing database
@@ -28,7 +29,7 @@ function requestManager($request)
 
 //checking if databse already has exisitng user
 
-	
+	try{
 	if ($db->connect_error) {
 		return array(
 			"returnCode" => 1,
@@ -36,7 +37,7 @@ function requestManager($request)
 		);
 	}
 
-	// Prepare SQL Statement, then set parameters, then execute the statement. btw FROM = ?? waiting for table..
+	// Prepare SQL Statement, then set parameters, then execute the statement.
 
 	$chkUser = $db->prepare("SELECT username, email FROM users WHERE username = ? OR email = ?");
 
@@ -51,8 +52,6 @@ function requestManager($request)
 	//checks to see if there is any lines that got back from chkUser then 
 
 	if ($result->num_rows > 0) {
-
-		//grabs current row and checks if there aren't any dupes
 		
 		$existingUser = $result->fetch_assoc();
 		
@@ -70,7 +69,7 @@ function requestManager($request)
 				);
 			}
 
-	}
+		}
 
 	// no dupes... time to insert it :D also rememeber table undefined idk what it is yet :(
 	
@@ -82,8 +81,8 @@ function requestManager($request)
 
 	if ($insertUser->execute()){
 		return array(
-			"returnCode"=> 1,
-			"message" => "you failed NO REGISTRATION COMPLETED :/"
+			"returnCode"=> 0,
+			"message" => "Registration Successful"
 		);
 	}
 
@@ -91,9 +90,20 @@ function requestManager($request)
 
 	return array(
 		"returnCode" => 1,
-		"message" => "unknown request type it didnt work ;("
-	);
+		"message" => "Regestration failed: " . $insertUser->error
+		);
+	}
+	catch(mysqli_sql_exception $exception)
+	{
+		echo "DB Error: " . $exception->getMessage() . PHP_EOL;
+		return array(
+			"returnCode"=> 1,
+			"message" => "database error..."
+		);
+	}
 }
+
+
 
 $server = new rabbitMQServer("testRabbitMQ.ini","authServer");
 
