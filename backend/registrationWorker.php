@@ -22,7 +22,7 @@ function requestManager($request)
 	
 	if ($request['type'] == "register")
 	{
-		$db = new mysqli('127.0.0.1', 'dbUser', '12345', 'authenticationdb' )
+		$db = new mysqli('127.0.0.1', 'dbUser', '12345', 'authenticationdb' );
 
 	}
 
@@ -38,7 +38,7 @@ function requestManager($request)
 
 	// Prepare SQL Statement, then set parameters, then execute the statement. btw FROM = ?? waiting for table..
 
-	$chkUser = $db->prepare("SELECT username, email, FROM users, WHERE username = ? OR email = ?");
+	$chkUser = $db->prepare("SELECT username, email FROM users WHERE username = ? OR email = ?");
 
 	$chkUser->bind_param('ss',$request['username'], $request['email']);
 
@@ -54,7 +54,7 @@ function requestManager($request)
 
 		//grabs current row and checks if there aren't any dupes
 		
-		$existingUser = $result->fetch_assoc()
+		$existingUser = $result->fetch_assoc();
 		
 			if ($existingUser['username'] == $request['username']){
 				return array(
@@ -75,7 +75,7 @@ function requestManager($request)
 	// no dupes... time to insert it :D also rememeber table undefined idk what it is yet :(
 	
 	$insertUser = $db->prepare("INSERT INTO users (email, first_name, last_name, username, password)
-		VALUES (?, ?, ?, ?, ?");
+		VALUES (?, ?, ?, ?, ?)");
 
 	$insertUser->bind_param("sssss", $request['email'], $request['first_name'], $request['last_name'],
 		$request['username'], $request['password']);
@@ -95,7 +95,7 @@ function requestManager($request)
 	);
 }
 
-$server = new rabbitMQServer("testRabbitMQ.ini","testAnimeServer");
+$server = new rabbitMQServer("testRabbitMQ.ini","registerServer");
 
 echo "Waiting for registration information..." . PHP_EOL;
 
