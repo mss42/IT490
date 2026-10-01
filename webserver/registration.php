@@ -6,7 +6,7 @@ require_once('rabbitMQLib.inc');
 
 
 
-$client = new rabbitMQClient("testRabbitMQ.ini","registerServer");
+$client = new rabbitMQClient("testRabbitMQ.ini","authServer");
 
 //building array to sent to worker with data sent from register.php
 

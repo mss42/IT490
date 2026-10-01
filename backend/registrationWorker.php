@@ -95,7 +95,7 @@ function requestManager($request)
 	);
 }
 
-$server = new rabbitMQServer("testRabbitMQ.ini","registerServer");
+$server = new rabbitMQServer("testRabbitMQ.ini","authServer");
 
 echo "Waiting for registration information..." . PHP_EOL;
 
