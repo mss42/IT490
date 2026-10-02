@@ -1,8 +1,6 @@
 #!/usr/bin/php
 <?php
-require_once('path.inc');
-require_once('get_host_info.inc');
-require_once('rabbitMQLib.inc');
+require_once __DIR__ . '/../RabbitMQ/rabbitMQLib.inc';
 
 //function manages requests sent by MQ if statments print messages depending if the connectivity test was valid
 
