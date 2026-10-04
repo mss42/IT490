@@ -1,10 +1,70 @@
 <?php
+
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
-?>
+//This will run after user submits the Authentication form
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
+		$errors = [];
 
+		//retrieves data from the Authentication form 
+			$email = $_POST["email"];
+			$first_name = $_POST["first_name"];
+			$last_name = $_POST["last_name"];
+			$username = $_POST["username"];
+			$password = $_POST["password"];
+
+			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				$errors[] = "You entered a invaild email format";
+			}
+
+
+			if (empty($first_name) || empty($last_name)) {
+				$errors[] = "You are required to enter your first and last name";
+			}
+
+
+			if (empty($username)) {
+				$errors[] = "A username is required";
+			}
+
+
+			if (empty($password)) {
+				$errors[] = "A password is required";
+			}
+
+			else {
+				$client = new rabbitMQClient("testRabbitMQ.ini", "authServer");
+				
+				//creates the request array for the worker
+				$request = array();
+
+				$request['type'] = "register";
+				$request['email'] = $_POST['email'];
+				$request['first_name'] = $_POST['first_name'];
+				$request['last_name'] = $_POST['last_name'];
+				$request['username'] = $_POST['username'];
+				$request['password'] = $_POST['password'];
+
+				$response = $client->send_request($request);
+
+				if (isset($response['returnCode']) && $response['returnCode'] == 0) {
+					//registration worked, user goes to login page
+					header("Location: login.php");
+					exit();
+				}
+
+				else {
+					$error = "Registration failed. Information already exists.";
+
+					header("Location: register.php");
+					exit();
+				}
+
+
+	}
+?>	
 
 
 <!DOCTYPE html>
