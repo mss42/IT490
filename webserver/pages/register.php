@@ -1,8 +1,6 @@
 <?php
 
-require_once('path.inc');
-require_once('get_host_info.inc');
-require_once('rabbitMQLib.inc');
+require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 
 //This will run after user submits the Authentication form
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -61,8 +59,8 @@ require_once('rabbitMQLib.inc');
 					header("Location: register.php");
 					exit();
 				}
-
-
+			}
+			//line aboce delete if not working			
 	}
 ?>	
 
@@ -78,7 +76,7 @@ require_once('rabbitMQLib.inc');
 <body>
 	<div class="Authentication_container">
 		<h1>Register Here</h1>
-		<form action="registration.php" method="POST">
+		<form action="register.php" method="POST">
 			<div class="Authentication_form">
 				<label for="email">Email</label>
 				<input type="email" name="email" required />
@@ -102,37 +100,7 @@ require_once('rabbitMQLib.inc');
 			<input type="submit" value="Register" class="submit_button"/>
 		</form>
 	</div>
-<?php
-//This will run after user submits the Authentication form
-	if($_SERVER["REQUEST_METHOD"] == "POST") {
-		$errors = [];
 
-		//retrieves data from the Authentication form 
-			$email = $_POST["email"];
-			$first_name = $_POST["first_name"];
-			$last_name = $_POST["last_name"];
-			$username = $_POST["username"];
-			$password = $_POST["password"];
-
-			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				$errors[] = "You entered a invaild email format";
-			}
-
-
-			if (empty($first_name) || empty($last_name)) {
-				$errors[] = "You are required to enter your first and last name";
-			}
-
-
-			if (empty($username)) {
-				$errors[] = "A username is required";
-			}
-
-
-			if (empty($password)) {
-				$errors[] = "A password is required";
-			}
-	}
-?>	
+				
 </body>
 </html>
