@@ -33,7 +33,7 @@ require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 			}
 
 			else {
-				$client = new rabbitMQClient("testRabbitMQ.ini", "authServer");
+				$client = new rabbitMQClient("testRabbitMQ.ini", "registerServer");
 				
 				//creates the request array for the worker
 				$request = array();

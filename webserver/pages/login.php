@@ -1,13 +1,137 @@
 <?php
+
 session_start();
 ob_start();
 
+
 require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+//checks to see if page is submited
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+	if (isset($_POST['username'])) {
+		$username = trim($_POST['username']);
+	}
+	else {
+		$username = '';
+	}
+
+	if (isset($_POST['password'])) {
+		$password = trim($_POST['password']);
+	}
+	else {
+		$password = '';
+	}
+}
+
+/*
+	if ($username === '' || $password === '') {
+		$_SESSION['error'] = "A username and password is required";
+		header("Location: login.php");
+		exit();
+	}
+ */
+	//save dir
+	$oldDir = getcwd();
+
+	//change to rabbit folder
+	chdir(__DIR__ . '/../../RabbitMQ');
+
+	$client = new rabbitMQClient("testRabbitMQ.ini", "loginServer");
+
+	//change back to the original DIR
+	chdir($oldDir);
+
+	$request = array();
+	$request['type'] = "login";
+	$request['username'] = $username;
+	$request['password'] = $password;
+
+	
+	
+	$response = $client->send_request($request);
+/*
+	if (!is array($response) || !isset($response['returnCode'])) {
+		$_SESSION['error'] = "Unexpected error from server. Try Again";
+		header("Location: login.php");
+		exit();
+	}
+*/ 
+	//login successful
+	if ($response['returnCode'] == 0) {
+
+		//create a session id 
+		session_regenerate_id(true);
+
+		//checks to see if a username was returned
+		if (isset($response['username'])) {
+			$_SESSION['username'] = $response['username'];
+		}
+		else {
+			$_SESSION['username'] = $username;
+		}
+		
+		//checks for a session id
+		if (isset($response['sessionID'])) {
+			$_SESSION['sessionID'] = $response['sessionID'];
+		}
+		else {
+			$_SESSOIN['sessionID'] = '';
+		}
+
+		header("Location: landing.php");
+		exit();
+	}
+
+
+//logs user in if return code was succesful
+if ($response['returnCode'] == 0) {
+
+	session_regenerate_id(true);
+	$_SESSION['username'] = $response['username'];
+	$_SESSION['sessionId'] = $response['password'];
+	header("Location: landing.php");
+	exit();
+}
+
+	// if not 0 then login failed
+/*
+	if (isset($response['message'])) {
+		$_SESSION['error'] = $response['message'];
+	}
+	else {
+		$_SESSION['error'] = "Invalid username or password";
+	}
+
 	header("Location: login.php");
 	exit();
 }
+
+
+ */
+
+
+/*
+$client = new rabbitMQClient("testRabbitMQ.ini", "authoServer");
+
+$request = array();
+$request['type'] = "login";
+$request['username'] = "username";
+$request['password'] = "password";
+
+
+$response = $client->send_request($request);
+
+if (isset($response['returnCode']) && $response['returnCode'] == 0) {
+	header("Location: landing.php");
+	exit();
+}
+else {
+	header("Location: login.php");
+	exit();
+}
+
+// old code under
 
 
 $username = trim($_POST['username'] ?? '');
@@ -26,17 +150,6 @@ chdir(__DIR__ . '/../../RabbitMQ');
 $client = new rabbitMQClient("testRabbitMQ.ini", "loginServer");
 chdir($oldDir);
 
-//did some error handling before hand *look at lines 14-21*
-$request = array();
-$request['type'] = "login";
-$request['username'] = "password";
-
-$response = $client->send_request($request);
-
-
-/*These next lines of code help if worker didn't send expect answer back to login..
- just a little safeguard for us just in case 
- */
 
 if (!is_array($reponse) || !isset($response['returnCode'])) {
 	$_SESSION['error'] = "Unexpected reply from server. Try Again.";
@@ -44,6 +157,8 @@ if (!is_array($reponse) || !isset($response['returnCode'])) {
 	exit();
 }
 
+//testing by removing the cmomment from this bottom part
+ 
 //logs user in if return code was succesful
 if ($response['returnCode'] == 0) {
 
@@ -59,10 +174,13 @@ if ($response['returnCode'] == 0) {
 $_SESSION['error'] = $response['message'];
 header("Location: login.php");
 exit();
+ 
+ */
+
 
 ?>
 
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">

@@ -2,7 +2,7 @@
 
 //checks to see if user is logged in by looking at username
 if (!isset($_SESSION['username'])) {
-	header("Location: index.php");
+	header("Location: landing.php");
 	exit();
 }
 
