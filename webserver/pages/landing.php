@@ -1,8 +1,9 @@
 <?php
+session_start();
 
 //checks to see if user is logged in by looking at username
 if (!isset($_SESSION['username'])) {
-	header("Location: landing.php");
+	header("Location: login.php");
 	exit();
 }
 

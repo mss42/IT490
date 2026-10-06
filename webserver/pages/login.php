@@ -76,14 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$_SESSION['sessionID'] = $response['sessionID'];
 		}
 		else {
-			$_SESSOIN['sessionID'] = '';
+			$_SESSION['sessionID'] = '';
 		}
 
 		header("Location: landing.php");
 		exit();
 	}
 
-
+/*
 //logs user in if return code was succesful
 if ($response['returnCode'] == 0) {
 
@@ -93,7 +93,7 @@ if ($response['returnCode'] == 0) {
 	header("Location: landing.php");
 	exit();
 }
-
+ */
 	// if not 0 then login failed
 /*
 	if (isset($response['message'])) {

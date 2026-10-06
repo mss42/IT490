@@ -1,12 +1,4 @@
-<?php
 
-//checks to see if user is logged in by looking at username
-if (!isset($_SESSION['username'])) {
-	header("Location: login.php");
-	exit();
-}
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
