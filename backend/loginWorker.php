@@ -13,10 +13,10 @@ if (!isset($request['type'])){
 	);
 }
  if ($request['type'] == "login"){
-	 $username = trim($_POST['username'] ?? '');
-	 $password = $_POST['password'] ?? '';
+	 $username = trim($request['username'] ?? '');
+	 $password = $request['password'] ?? '';
 	 
-	 if (username === '' || $password === '')
+	 if ($username === '' || $password === '')
 	 {
 		 return array(
 			 "returnCode" => 1,
@@ -46,9 +46,12 @@ if (!isset($request['type'])){
 
 	//this will be the lines of code that generate a session key AND store it
 	$sessionId = bin2hex(random_bytes(32));
+	$date = new DateTime();
+        $date->modify('+1 hour');
+        $expires_at = $date->format('Y-m-d H:i:s');
 	$addSession = $db->prepare("INSERT INTO sessions (sessionid, userid, expires_at)
-	VALUES (?, ?, NOW() + INTERVAL 1 HOUR)");
-	$addSession->bind_param('si', $sessionId, $user['userid']);
+	VALUES (?, ?, ?)");
+	$addSession->bind_param('sis', $sessionId, $user['userid'], $expires_at);
 	$addSession->execute();
 	$addSession->close();
 	$db->close();
@@ -57,7 +60,7 @@ if (!isset($request['type'])){
 	return array(
 		"returnCode" => 0,
 		"message" => "Login successful",
-		"sessionId" => $sessionId,
+		"sessionID" => $sessionId,
 		"username" => $user['username']
 		);
 	}
@@ -65,7 +68,7 @@ if (!isset($request['type'])){
 	{
 		echo " DB Error: " . $exception->getMessage() . PHP_EOL;
 		return array(
-			"retunrCode" => 1,
+			"returnCode" => 1,
 			"message" => "Database error, please try again"
 		);
 	}
