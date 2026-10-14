@@ -56,8 +56,8 @@ require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 				else {
 					$error = "Registration failed. Information already exists.";
 
-					header("Location: register.php");
-					exit();
+					//header("Location: register.php");
+					//exit();
 				}
 			}
 			//line aboce delete if not working			
@@ -100,7 +100,14 @@ require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 			<input type="submit" value="Register" class="submit_button"/>
 		</form>
 	</div>
-
+	<div class = "login_back">
+		<a href="login.php" class "button">LoginPage</a>
+	</div>
+	<?php if (!empty($error)): ?>
+	<script>
+		alert(<?php echo json_encode($error); ?>);
+	</script>
+	<?php endif; ?>
 				
 </body>
 </html>
