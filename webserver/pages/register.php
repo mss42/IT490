@@ -47,6 +47,55 @@ require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 
 				$response = $client->send_request($request);
 
+		/*	
+			if (isset($response['returnCode']) && $response['returnCode'] == 0) {
+					//registration worked, user goes to login page
+					header("Location: login.php");
+					exit();
+				}
+
+				else {
+					$error = "Registration failed. Information already exists.";
+				
+					//error pop up
+	
+
+					header("Location: register.php");
+					exit();
+				}
+*/
+				//new code
+			//	$msg = '';
+
+			//	if ($_SERVER("REQUEST_METHOD") === 'POST') {
+					/*
+					$email = trim($_POST['email']);
+					$first_name = ($_POST['first_name']);
+					$last_name = ($_POST['last_name']);
+					$username = ($_POST['username']):
+					$password = ($_POST['password']);
+
+					 */
+				/*
+
+					if ($email == '' || $first_name == '' || $last_name == '' || $username == '' || $password = '') {
+						$msg = 'Fill out each feild';
+					}
+					elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+						$msg = 'Email Invaild';
+					}
+					elseif ($username) {
+						$msg = 'Username taken';
+					}
+					/*
+					else {
+						$reply = send_request
+					}
+					 
+					$msg = $reply['message'];
+					//end of new code
+
+
 				if (isset($response['returnCode']) && $response['returnCode'] == 0) {
 					//registration worked, user goes to login page
 					header("Location: login.php");
@@ -55,14 +104,23 @@ require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 
 				else {
 					$error = "Registration failed. Information already exists.";
+				
+					//error pop up
+	
 
 					header("Location: register.php");
 					exit();
 				}
+*/
+
+				
+
 			}
-			//line aboce delete if not working			
+	
+					
 	}
 ?>	
+
 
 
 <!DOCTYPE html>
@@ -101,6 +159,16 @@ require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 		</form>
 	</div>
 
-				
+                 <div class="login_link">
+			<a href="login.php" class="button">Login page</a>
+		</div>
+	
+	<?php if (!empty($error)): ?>
+	<script>
+		alert(<?php echo json_encode($error); ?>);
+	</script>
+	<?php endif; ?>
+	
+
 </body>
 </html>
