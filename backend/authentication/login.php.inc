@@ -6,7 +6,7 @@ private $logindb;
 
 public function __construct()
 {
-        $this->logindb = new mysqli("127.0.0.1","authUser","12345","authenticationdb");
+        $this->logindb = new mysqli("127.0.0.1","dbUser","12345","authenticationdb");
 
         if ($this->logindb->connect_errno != 0)
         {
@@ -58,6 +58,7 @@ public function createAccount($username, $password, $email)
 		return false;
 	}
 
+}
 }
 }
 ?>
