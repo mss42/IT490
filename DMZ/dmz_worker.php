@@ -31,7 +31,6 @@ function processDMZRequest($request)
 	return[
 		"type" => "addAnime",		
 		"animeid"=> $anime["anime_id"],
-		"url" => $anime["anime_url"],
 		"title" => $anime["title"],
 		"synopsis" => $anime["synopsis"],
 		"image" => $anime["main_pic"],
