@@ -43,14 +43,13 @@ if ($request['type'] == "getAnime"){
 if ($request['type'] == "addAnime"){
         try{
                 $animeid = $request['animeid'];
-		$url = $request['url'];
 		$title = $request['title'];
 		$synopsis = $request['synopsis'];
 		$image = $request['image'];
 		$score = $request['score'];
 
                 $addAnime = new animeDB();
-                return $addAnime->addAnime($animeid, $url, $title, $synopsis, $image, $score);
+                return $addAnime->addAnime($animeid, $title, $synopsis, $image, $score);
 		//returnCode 0 = added and returned
         }
         catch (mysqli_sql_exception $exception)

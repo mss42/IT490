@@ -45,11 +45,11 @@ public function cachedAnime($animeid){
 		);
 }
 
-public function addAnime($animeid, $url, $title, $synopsis, $image, $score){
+public function addAnime($animeid, $title, $synopsis, $image, $score){
 
-	$addstmt = $this->animedb->prepare("INSERT INTO anime (anime_id,anime_url,title,synopsis,main_pic,score)
-								VALUES (?,?,?,?,?,?)");
-	$addstmt->bind_param("isssd", $animeid, $url, $title, $synopsis, $image, $score);
+	$addstmt = $this->animedb->prepare("INSERT INTO anime (anime_id,title,synopsis,main_pic,score)
+								VALUES (?,?,?,?,?)");
+	$addstmt->bind_param("isssd", $animeid, $title, $synopsis, $image, $score);
 	$addstmt->execute();
 	$addstmt->close();
 
