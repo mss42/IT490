@@ -18,6 +18,10 @@ function dmzRequestHandler($request)
 		}
 		echo "Request: " . json_encode($request) . PHP_EOL;
 
+		if(($request['type'] ?? '') === 'getNews'){
+			return fetchNews();
+		}
+
 		//validate request and call Tenrai
 		
 		$addAnime = processDMZRequest($request);

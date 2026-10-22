@@ -51,3 +51,53 @@ function fetchAnime(int $animeid): array
 	];
 
 }
+
+function fetchNews(): array 
+{
+	$url = "https://www.animenewsnetwork.com/all/rss.xml?ann-edition=us";
+	
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_USERAGENT, "IT490-AnimeApp/1.0");
+
+	$response = curl_exec($ch);
+	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	$error = curl_error($ch);
+	curl_close($ch);
+
+	if ($response === false) {
+		throw new RuntimeException("News request failed: " . $error);
+	}
+	if ($httpCode !== 200){
+		throw new RuntimeException("News feed returned HTTP Status: " . $httpCode);
+	}
+
+	libxml_use_internal_errors(true);
+	$xml = simplexml_load_string($response);
+	if ($xml == false || !isset($xml->channel->item)){
+		throw new RuntimeExceptions("Invalid news feed");
+	}
+
+	$articles = [];
+	foreach($xml->channel->item as $item){
+		$summary = trim(strip_tags((string) $item->description));
+		$articles[] = [
+			"title" => (string) $item->title,
+			"link" => (string) $item->link,
+			"date" => (string) $item->pubDate,
+			"summary" => mb_substr($summary, 0, 200)
+		];
+		if(count($articles) >= 10) {
+			break;
+		}
+	}
+
+	return[
+		"returnCode" => 0,
+		"articles" => $articles
+	];
+}
+								
