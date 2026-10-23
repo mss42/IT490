@@ -18,8 +18,6 @@ public function __construct()
 
 public function cachedAnime($animeid){
 
-	$id = $this->animedb->$animeid;
-
         $iscached = $this->animedb->prepare("SELECT * FROM anime WHERE anime_id = ?");
 	$iscached->bind_param("i", $animeid);
 	$iscached->execute();
@@ -27,7 +25,7 @@ public function cachedAnime($animeid){
 	$result = $iscached->get_result();
 
 	if($row = $result->fetch_assoc()){
-		iscached->close();
+		$iscached->close();
 		//get anime from api
 		return array( 
 		        "returnCode" => 0,
