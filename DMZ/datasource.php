@@ -44,7 +44,7 @@ function fetchAnime(int $animeid): array
 	return[
 		"anime_id" => $data["mal_id"],
 		"anime_url" => $data["url"] ?? null,
-		"title" => $data["title"] ?? null,
+		"title" => $data["title_english"] ?? ($data["title"] ??  null),
 		"synopsis" => $data["synopsis"] ?? null,
 		"main_pic" => $data["images"]["jpg"]["large_image_url"] ?? null,
 		"score" => $data["score"] ?? null
