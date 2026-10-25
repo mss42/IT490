@@ -159,9 +159,6 @@ require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 		</form>
 	</div>
 
-                 <div class="login_link">
-			<a href="login.php" class="button">Login page</a>
-		</div>
 	
 	<div class = "login_back">
 		<a href="login.php" class "button">LoginPage</a>

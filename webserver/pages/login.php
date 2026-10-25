@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	else {
 		$password = '';
 	}
-}
+//deleted }
 
 /*
 	if ($username === '' || $password === '') {
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		header("Location: landing.php");
 		exit();
 	}
-
+} //delete if error
 /*
 //logs user in if return code was succesful
 if ($response['returnCode'] == 0) {
