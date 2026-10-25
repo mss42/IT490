@@ -1,6 +1,6 @@
 <?php 
 
-$url = "https://api.jikan.moe/v4/anime/269/full";
+$url = "https://api.tenrai.org/v1/anime/269/episodes/1";
 
 $ch = curl_init();
 
@@ -19,16 +19,16 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
 if($httpCode !== 200){
-	die("Jikan returned HTTPS status: " . $httpCode . PHP_EOL);
+	die("Tenrai returned HTTPS status: " . $httpCode . PHP_EOL);
 }
 
 $data = json_decode($response,true);
 
 if(!isset($data["data"])){
-	die("Invalid response from Jikan" . PHP_EOL);
+	die("Invalid response from Tenrai" . PHP_EOL);
 }
 
-echo "Jikan Connection Successful!" . PHP_EOL;
+echo "Tenrai Connection Successful!" . PHP_EOL;
 echo "Anime_ID: " . $data["data"]["mal_id"] . PHP_EOL;
 echo "Title: " . $data["data"]["title"] . PHP_EOL;
 echo "Score: " . $data["data"]["score"] . PHP_EOL;
