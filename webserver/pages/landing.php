@@ -115,6 +115,16 @@ catch (Throwable $error) {
 <body>
 <h1>Welcome in <?php echo htmlspecialchars($_SESSION['username']); ?> <h1>
 
+<!-- Path
+
+to
+
+My 
+
+Recommendation site -->
+
+<a href="reccomendation.php">View My Recommendations</a>
+
 <!--	<form id="search_form" class="search_bar">
 		<input type="text" id="search_input" placeholder="Search" maxlength="100" required />
 		<button type="submit">Search</button>
