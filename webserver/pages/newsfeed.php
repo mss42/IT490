@@ -1,16 +1,16 @@
 <?php
 
-session_start()
+session_start();
 
-if (!isset($_SESSION['username'})) {
+if (!isset($_SESSION['username'])) {
 	header('Location: login.php');
-	exit()
+	exit();
 }
 
 $articles = [];
 $error = '';
 
-try {
+
 
 require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 
@@ -69,7 +69,7 @@ try {
 		
 		<h2> <?php echo htmlspecialchars($article["title"] ?? ""); ?> </h2>
 
-		<p> <strong>Published:</strong> <?php echo htmlspecialchars($article{"date"] ?? ""); ?> </p>
+		<p> <strong>Published:</strong> <?php echo htmlspecialchars($article["date"] ?? ""); ?> </p>
 		
 		<p> <?php echo htmlspecialchars($article["summary"] ?? ""); ?> </p>
 		
