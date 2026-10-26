@@ -18,7 +18,7 @@ require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 function sendToQueue($server, $request) {
 	$oldDir = getcwd();
 	chdir(__DIR__ . '/../../RabbitMQ');
-	$client = new rabbitMQClient("testRabbitMQ.ini", $server);
+	$client = new rabbitMQClient("testRabbitMQ.ini", "newsfeedServer");
 	chdir($oldDir);
 	return $client->send_request($request);
 }
