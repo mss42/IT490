@@ -1,4 +1,4 @@
-<?php>
+<?php
 session_start();
 
 //once again checks if user is logged in
@@ -38,8 +38,8 @@ function displayText($value) {
 		(string)$value,
 		ENT_QUOTES,
 		'UTF-8'
-	)
-};
+	);
+}
 ?>
 
 <!DOCTYPE html>
@@ -92,7 +92,7 @@ function displayText($value) {
 
 	<p> Discover Anime based on YOUR ratings and preferences </p>
 
-	<?php if (empty($recommendations)) { ?>
+	<?php if (empty($recommendation)) { ?>
 
 		<h2>No Recommendations yet</h2>
 
@@ -109,9 +109,9 @@ function displayText($value) {
 
 		<h3> <?php echo displayText($anime['title']); ?> </h3>
 
-		<p> <strong>Genres</strong> <?php echo displayText[$anime['genres']); ?> </p>
+		<p> <strong>Genres</strong> <?php echo displayText($anime['genres']); ?> </p>
 
-		<p> <?php echo displayText[$anime['reason']); ?> </p>
+		<p> <?php echo displayText($anime['reason']); ?> </p>
 
 		<a href="landing.php?id=<?php echo urlencode($anime['animeid']); ?>">Anime<a/>
 	</div>
