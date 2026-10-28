@@ -28,7 +28,8 @@ function cleanAnime($a)
 		"score"    => $a['score'] ?? null,
 		"type"     => $a['type'] ?? '',
 		"episodes" => $a['episodes'] ?? null,
-		"year"     => $a['year'] ?? null
+		"year"     => $a['year'] ?? null,
+		"genres" => implode(",",array_column($a['genres'] ?? [], 'name'))
 	);
 }
 
@@ -76,7 +77,7 @@ function requestManager($request)
 			return array("returnCode" => 1, "message" => "Invalid anime id");
 		}
 
-		$one = callApi("https://api.tenrai.org/v1/anime/" . $id);
+		$one = callApi("https://api.tenrai.org/v1/anime/" . $id ."/full");
 		if ($one === null) {
 			return array("returnCode" => 1, "message" => "Anime not found or API unavailable");
 		}

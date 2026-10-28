@@ -22,6 +22,10 @@ function dmzRequestHandler($request)
 			return fetchNews();
 		}
 
+		if(($request['type'] ?? '') === 'getRecommendations'){
+			return fetchRecommendations($request['liked'] ?? [], $request['exclue'] ?? []);
+		}
+
 		//validate request and call Tenrai
 		
 		$addAnime = processDMZRequest($request);

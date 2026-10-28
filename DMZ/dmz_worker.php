@@ -34,7 +34,8 @@ function processDMZRequest($request)
 		"title" => $anime["title"],
 		"synopsis" => $anime["synopsis"],
 		"image" => $anime["main_pic"],
-		"score" => $anime["score"]
+		"score" => $anime["score"],
+		"genres" => $anime["genres"],
 	];
 
 }
