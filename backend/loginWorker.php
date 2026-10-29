@@ -27,7 +27,7 @@ if (!isset($request['type'])){
 	 try
 	 {	
 		 //this will go into the database and check if username exists
-		 $db = new mysqli('100.105.60.109', 'dbUser', '12345', 'authenticationdb' );
+		 $db = new mysqli('127.0.0.1', 'dbUser', '12345', 'authenticationdb' );
 		 
 		 $chkUser = $db->prepare("SELECT userid, username, password FROM users WHERE username = ?");
 		 $chkUser->bind_param('s', $username);

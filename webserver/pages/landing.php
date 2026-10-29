@@ -9,15 +9,12 @@ if (!isset($_SESSION['username'])) {
 
 require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 
-//sends request to the backend an returns the reply
+
 function sendToQueue($server, $request) {
 	$oldDir = getcwd();
 	chdir( __DIR__ . '/../../RabbitMQ');
 	$client = new rabbitMQClient("testRabbitMQ.ini", $server);
 	chdir($oldDir);
- 	return $client->send_request($request);
-}
-
 
 $message= '';
 $heading= '';
@@ -32,7 +29,7 @@ $id = trim($_GET['id'] ?? '');
 try {
 	//if anime clicked get info on it
 	if ($id !== '') {
-		//if id contains anything other than digits throw error
+
 		if (!ctype_digit($id)) {
 			$message = 'Invailed anime';
 		}

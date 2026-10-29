@@ -18,20 +18,12 @@ function requestManager($request)
 	}
 
 	//accessing database
-	
-	if ($request['type'] == "register")
-	{
-		$db = new mysqli('100.105.60.109', 'dbUser', '12345', 'authenticationdb' );
-
-	}
-
-//checking if databse already has exisitng user
 
 	try{
 
         if ($request['type'] == "register")
         {
-		 $db = new mysqli('100.105.60.109', 'dbUser', '12345', 'authenticationdb' );
+		 $db = new mysqli('127.0.0.1', 'dbUser', '12345', 'authenticationdb' );
 
         }
 
