@@ -9,16 +9,12 @@ if (!isset($_SESSION['username'])) {
 
 require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 
-//sends request to queue an return reply
 
 function sendToQueue($server, $request) {
 	$oldDir = getcwd();
 	chdir( __DIR__ . '/../../RabbitMQ');
 	$client = new rabbitMQClient("testRabbitMQ.ini", $server);
 	chdir($oldDir);
-
-	return $client->send_request($request);
-}
 
 $message= '';
 $heading= '';
@@ -33,6 +29,7 @@ $id = trim($_GET['id'] ?? '');
 try {
 	//if anime clicked get info on it
 	if ($id !== '') {
+
 		if (!ctype_digit($id)) {
 			$message = 'Invailed anime';
 		}
@@ -49,25 +46,31 @@ try {
 			}
 
 			elseif (isset($dbReply['returnCode']) && $dbReply['returnCode'] == 1) {
+
 				//not in database: get from API
-				$apiReply = sendToQueue("searchServer", array("type" => "details", "animeid" => $id));				      
+				$apiReply = sendToQueue("searchServer", array("type" => "details", "animeid" => $id));		
+
 				if (isset($apiReply['returnCode']) && $apiReply['returnCode'] == 0) {
 					$detail = $apiReply['anime'];
+
 					$detailNotes = 'Loads from the API and saves it';
 
-//save in DB
-	sendToQueue("animeServer", array( "type" => "addAnime", "animeid" => $detail['animeid'], "url" => $detail['url'], "title" => $detail['title'], "synopsis" => $detail['synopsis'], "image" => $detail['image'], "score" => $detail['score'])); 
-}
- 
+//saved in DB
+	sendToQueue("animeServer", array( "type" => "addAnime", "animeid" => $detail['animeid'], "url" => $detail['url'], "title" => $detail['title'], "synopsis" => $detail['synopsis'], "image" => $detail['image'], "score" => $detail['score'], "genres" => $detail['genres']));
+}	
+	
 	else {
-	$message = $apiReply['message'] ?? 'Could not load';
+		$message = $apiReply['message'] ?? 'Could not load';
 	} 
 }
-		else {
+
+	else {
 		$message =$dbReply['message'] ?? 'Error from backend';
 		}
-	}
+ 	}
 }
+
+
 
 //search anime
 
@@ -115,13 +118,10 @@ catch (Throwable $error) {
 <body>
 <h1>Welcome in <?php echo htmlspecialchars($_SESSION['username']); ?> <h1>
 
-<!--	<form id="search_form" class="search_bar">
-		<input type="text" id="search_input" placeholder="Search" maxlength="100" required />
-		<button type="submit">Search</button>
+<p><a href="recommendation.php">View my Recommendations</a></p>
 
-</form>
+<p><a href="newsfeed.php">Anime News Feed</a></p>
 
--->
 <!-- search bar -->
 <form method="GET" action="landing.php" class="search_bar">
 	<input type="text" name="queue" value="<?php echo htmlspecialchars($queue); ?>" placeholder="Search anime" maxlength="100" required />
@@ -164,9 +164,13 @@ else {
 </p>
 
 <small><?php echo htmlspecialchars($detailNotes); ?></small>
+<p><a href="discussion.php?animeid=<?php echo urlencode($id); ?>">Discussion forum</a></p>
+</div>
+<p><a href="rating.php?animeid=<?php echo urlencode($id); ?>">Rating and Review</a></p>
 </div>
 
 <?php } ?>
+
 
 	<!-- list of headings above animes -->
 	<?php if($heading !== '') { ?>
@@ -189,7 +193,7 @@ else {
 		
 
 		<?php
-		//
+		
 		
 		$info = array();
 		if (!empty($anime['type'])) {
@@ -207,6 +211,7 @@ else {
 		}
 ?>
 
+		<!-- combines all the elements of info into one array string -->
 		<p><?php echo htmlspecialchars(implode('|', $info)); ?></p>
 		
 		</a>
