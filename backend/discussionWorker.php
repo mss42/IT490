@@ -188,6 +188,25 @@ if ($request['type'] == "createReply"){
                 $replyid = $discussion->createReply(
                         $threadid, $userid, $content
                 );
+
+		//email notifications
+		$creator = $discussion->getCreatorEmail($threadid);
+		if($creator){
+			$to = $creator['email'];
+			$subject = "New Reply to Your Discussion Post";
+			$body = "Log in and check the forum!";
+			$headers = array("From" => "ds2329@njit.edu",
+					"Conent-Type" => "text/plain; charset=UTF-9");
+		try{
+			$sent = mail($to, $subject, $body, $headers);
+			if(!$sent){
+				error_log("Discussion email did not send");
+			}
+		}catch(Throwable $error){
+			error_log("Email Error: " . $error->getMessage());
+		}
+
+		}
                 return array(
                         "returnCode" => 0,
                         "replyid" => $replyid,

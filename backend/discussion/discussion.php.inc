@@ -147,11 +147,8 @@ public function createThread($animeid, $userid, $title, $content)
             "Thread title and content cannot be empty"
         );
     }
-    $query = "
-        INSERT INTO animedb.discussion_threads
-            (anime_id, userid, title, content)
-        VALUES (?, ?, ?, ?)
-    ";
+    $query = "INSERT INTO animedb.discussion_threads(anime_id, userid, title, content)
+						VALUES (?, ?, ?, ?)";
 
     $stmt = $this->conn->prepare($query);
 
@@ -219,4 +216,20 @@ public function getSessionUser($sessionid)
     return (int) $row["userid"];
 }
 
+public function getCreatorEmail($threadid)
+{
+    $query = "SELECT u.email, t.userid FROM animedb.discussion_threads t
+		JOIN authenticationdb.users u
+		ON u.userid = t.userid
+		WHERE t.thread_id = ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("i", $threadid);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $creator = $result->fetch_assoc();
+    $stmt->close();
+
+    return $creator;
+}
 }
