@@ -121,6 +121,8 @@ catch (Throwable $error) {
 <body>
 <h1>Welcome in <?php echo htmlspecialchars($_SESSION['username']); ?> <h1>
 
+<p><a href="login.php">Logout</a></p>
+
 <p><a href="recommendation.php">View my Recommendations</a></p>
 
 <p><a href="newsfeed.php">Anime News Feed</a></p>
