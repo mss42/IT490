@@ -8,6 +8,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
+
 //sends request to the rabbit server called, switches to Rabbit dir to load configs
 //returns to original directory
 function sendToQueue($server, $request)
@@ -28,6 +29,7 @@ function sendToQueue($server, $request)
         chdir($oldDir);
     }
 }
+
 //get anime id from URL
 $animeid = $_GET['animeid'] ?? '';
 
@@ -50,7 +52,7 @@ try {
 	}
 	else {
 		//sends it to the backend
-		$reply = sendToQueue("reviewServer", array( "type" => "addReview", "animeid" => $animeid, "username" => $_SESSION['username'], "rating" => (int)$rating, "review" => $review));
+		$reply = sendToQueue("reviewServer", array( "type" => "addReview", "animeid" => $animeid, "sessionID" => $_SESSION['sessionID'], "rating" => (int)$rating, "review" => $review));
 
 		//redirect if review was saved
 		if (isset($reply['returnCode']) && $reply['returnCode'] == 0) {
@@ -140,9 +142,7 @@ catch (Throwable $error) {
 		<!-- Submit button for rating and review -->
 		<button type="submit">Submit Review</button>
 	</form>
-	
-	<!--link back to landing -->
-	<p><a href="landing.php">Back to Landing page</a></p>
+
 </body>
 </html>
 	
