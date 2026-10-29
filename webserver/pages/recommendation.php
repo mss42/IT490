@@ -9,30 +9,36 @@ if (!isset($_SESSION['username'])) {
 
 }
 
-//sample data lets hope kev messes with this anime 
+require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
 
-$recommendation = [
-	[
-		"animeid" => 1,
-		"title" => "Cowboy Bebop",
-		"genres" => "Action, Sci-Fi",
-		"reason" => "Matches your interest in Action anime"
-	],
-	[
-		"animeid" => 20,
-		"title" => "One Piece",
-		"genres" => "Adventure, Action",
-		"reason" => "Matches your interest in Adventure anime"
-	],
-	[
-		"animeid" => 30,
-		"title" => "Neon Genesis Evangelion",
-		"genres" => "Drama, Sci-Fi",
-		"reason" => "Matches your interest in Sci-Fi anime"
-	]
-];
+//sends request to the backend an returns the reply
+function sendToQueue($server, $request) {
+	$oldDir = getcwd();
+	chdir( __DIR__ . '/../../RabbitMQ');
+	$client = new rabbitMQClient("testRabbitMQ.ini", $server);
+	chdir($oldDir);
+	return $client->send_request($request);
+}
 
-// this function helps later on with displaying the animes samples
+$recommendation = [];
+$message = '';
+
+try {
+	//1. ask the DB which anime this user rated 4 or 5, and everything they've rated
+	$db = sendToQueue("animeServer", array("type" => "getLikedAnime", "username" => $_SESSION['username']));
+
+	//2. ask the DMZ for anime recommended by fans of those anime
+	$rec = sendToQueue("dmzServer", array("type" => "getRecommendations", "liked" => $db['liked'] ?? [], "exclude" => $db['rated'] ?? []));
+
+	if (isset($rec['returnCode']) && $rec['returnCode'] == 0) {
+		$recommendation = $rec['results'] ?? [];
+	}
+}
+catch (Throwable $error) {
+	$message = 'Could not reach server';
+}
+
+// this function helps later on with displaying the animes
 function displayText($value) {
 	return htmlspecialchars(
 		(string)$value,
@@ -70,6 +76,11 @@ function displayText($value) {
 			margin-top: 0;
 		}
 
+		.recommendation-card img {
+			width: 100%;
+			border-radius: 8px;
+		}
+
 		.recommendation-card a {
 			display: inline-block;
 			margin-top: 10px;
@@ -92,6 +103,10 @@ function displayText($value) {
 
 	<p> Discover Anime based on YOUR ratings and preferences </p>
 
+	<?php if ($message !== '') { ?>
+		<p><?php echo displayText($message); ?></p>
+	<?php } ?>
+
 	<?php if (empty($recommendation)) { ?>
 
 		<h2>No Recommendations yet</h2>
@@ -107,13 +122,19 @@ function displayText($value) {
 
 			<div class="recommendation-card">
 
+		<?php if (!empty($anime['image'])) { ?>
+			<img src="<?php echo displayText($anime['image']); ?>" alt="<?php echo displayText($anime['title']); ?>">
+		<?php } ?>
+
 		<h3> <?php echo displayText($anime['title']); ?> </h3>
 
-		<p> <strong>Genres</strong> <?php echo displayText($anime['genres']); ?> </p>
+		<?php if (!empty($anime['genres'])) { ?>
+			<p> <strong>Genres</strong> <?php echo displayText($anime['genres']); ?> </p>
+		<?php } ?>
 
 		<p> <?php echo displayText($anime['reason']); ?> </p>
 
-		<a href="landing.php?id=<?php echo urlencode($anime['animeid']); ?>">Anime<a/>
+		<a href="landing.php?id=<?php echo urlencode($anime['animeid']); ?>">View anime</a>
 	</div>
 <?php } ?>
 
@@ -126,5 +147,3 @@ function displayText($value) {
 
 </body>
 </html>
-
-

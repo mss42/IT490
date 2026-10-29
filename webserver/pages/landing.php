@@ -169,6 +169,8 @@ else {
 <small><?php echo htmlspecialchars($detailNotes); ?></small>
 <p><a href="discussion.php?animeid=<?php echo urlencode($id); ?>">Discussion forum</a></p>
 </div>
+<p><a href="rating.php?animeid=<?php echo urlencode($id); ?>">Rating and Review</a></p>
+</div>
 
 <?php } ?>
 
