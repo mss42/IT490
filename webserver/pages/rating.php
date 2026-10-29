@@ -8,7 +8,26 @@ if (!isset($_SESSION['username'])) {
 }
 
 require_once __DIR__ . '/../../RabbitMQ/rabbitMQLib.inc';
+//sends request to the rabbit server called, switches to Rabbit dir to load configs
+//returns to original directory
+function sendToQueue($server, $request)
+{
+    $oldDir = getcwd();
 
+    chdir(__DIR__ . '/../../RabbitMQ');
+
+    try {
+        $client = new rabbitMQClient(
+            "testRabbitMQ.ini",
+            $server
+        );
+
+        return $client->send_request($request);
+    }
+    finally {
+        chdir($oldDir);
+    }
+}
 //get anime id from URL
 $animeid = $_GET['animeid'] ?? '';
 
